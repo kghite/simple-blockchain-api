@@ -1,6 +1,6 @@
 # simple-blockchain-api
 
-Basic blockchain api with Flask and Python
+Basic blockchain api with Flask and Python: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
 
 ## Block Format
 
