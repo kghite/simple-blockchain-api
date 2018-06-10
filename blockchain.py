@@ -21,8 +21,8 @@ class Blockchain(object):
     """
     def new_block(self, proof, previous_hash=None):
         block = {
-            'index': len(self.chain + 1),
-            'timestamp': time,
+            'index': len(self.chain) + 1,
+            'timestamp': time(),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1])
@@ -77,11 +77,11 @@ class Blockchain(object):
     """
     @staticmethod
     def valid_proof(last_proof, proof):
-        guess_string = last_proof + proof
+        guess_string = str(last_proof) + str(proof)
         guess = guess_string.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
 
-        return gues_hash[:4] == '0000'
+        return guess_hash[:4] == '0000'
 
     """
     Return the last block in the blockchain
@@ -89,3 +89,30 @@ class Blockchain(object):
     @property
     def last_block(self):
         return self.chain[-1]
+
+
+if __name__ == '__main__':
+    # Test the blockchain methods
+    b = Blockchain()
+
+    transaction =  b.new_transaction(
+        sender = '0',
+        recipient = '0',
+        amount = 1)
+    print transaction
+
+    last_block = b.last_block
+    last_proof = last_block['proof']
+    proof = b.proof_of_work(last_proof)
+
+    previous_hash = b.hash(last_block)
+    block = b.new_block(proof, previous_hash)
+
+    response = {
+        'message': "New Block Forged",
+        'index': block['index'],
+        'transactions': block['transactions'],
+        'proof': block['proof'],
+        'previous_hash': block['previous_hash'],
+    }
+    print response
